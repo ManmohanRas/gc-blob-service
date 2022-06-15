@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:52565",
+      "sslPort": 44332
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "v1",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "KeyVaultUri": "https://morrisgis-key-vault.vault.azure.net/",
+        "AZURE_USERNAME": "Swalter@co.morris.nj.us"
+      }
+    },
+    "morris_azstorage_service": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "v1",
+      "applicationUrl": "https://localhost:44332;http://localhost:52565",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "KeyVaultUri": "https://morrisgis-key-vault.vault.azure.net/",
+        "AZURE_USERNAME": "Swalter@co.morris.nj.us"
+      }
+    }
+  }
+}

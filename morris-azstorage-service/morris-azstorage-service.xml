@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>morris-azstorage-service</name>
+    </assembly>
+    <members>
+        <member name="M:morris_azstorage_service.Controllers.FilesController.ListFiles(morris_azstorage_service.Models.ContainerFilter)">
+             <summary>
+             List files within a container, with optional filters.
+             </summary>
+             <returns> Returns a list of files inside an Azure container.</returns>
+             <remarks> Three additional parameters allow containers to be filtered by: file prefix, file name and file type. The prefix filter is the most efficient,
+             as it is applied directly to the Azure REST API query!<br></br>
+             File extensions and partial string searches must loop through each file name to determine equality AFTER the prefix is applied, so it is most efficient to use
+             Prefix filters to reduce the RBAR.<br></br> 
+             Sample request:
+            
+                 POST/ListFilesByContainer
+                 {
+                    "folder": "pres-trust-client",
+                    "prefix": "morris",
+                    "partialstring":"",
+                    "extensions": [""]
+                 }
+            </remarks>
+             <param name="cf">The Blob container filter object. Required</param>
+             <response code="200">Success, return a collection of projectLiteDto. Or an empty array if the the query does not find any projects.</response>
+             <response code="400">If query has a bad format or has unknown fields.</response> 
+             <response code="501">Something wrong occurs with this operation.</response>
+        </member>
+        <member name="M:morris_azstorage_service.Controllers.FilesController.UploadFile(morris_azstorage_service.Models.BlobMeta)">
+             <summary>
+             Upload a file to a container, with optional metadata.
+             </summary>
+             <returns> Uploads a file to an Azure container.</returns>
+             <remarks> The original file name is maintained, and suffixed with a numerical (1) counter if the file already exists.<br></br>
+             Use the other method to include a renamed file.
+             Prefix filters to reduce the RBAR.<br></br> 
+             Sample request:
+            
+                 POST/UploadFile
+                 {
+                    "asset": {IFormFile},
+                    "container": "pres-trust-client",
+                    "saveAsFileName":null,
+                    "title":null,
+                    "description":null,
+                    "category":null,
+                    "user":null,
+                    "owner":null,
+                    "component":null,
+                    "domId":null
+                 }
+            </remarks>
+             <param name="bm">The Blob file object. Required</param>
+             <response code="200">Success, return a collection of projectLiteDto. Or an empty array if the the query does not find any projects.</response>
+             <response code="400">If query has a bad format or has unknown fields.</response> 
+             <response code="501">Something wrong occurs with this operation.</response>
+        </member>
+        <member name="M:morris_azstorage_service.Controllers.FilesController.DownloadFile(System.String,System.String)">
+             <summary>
+             Download a file from a container.
+             </summary>
+             <returns> Downloads a file to an Azure container.</returns>
+             <remarks> The original file name is maintained, and suffixed with a numerical (1) counter if the file already exists.<br></br>
+             Use the other method to include a renamed file.
+             Prefix filters to reduce the RBAR.<br></br> 
+             Sample request:
+            
+                 POST/UploadFile
+                 {
+                    "containerName": "pres-trust-client",
+                    "fileName":"MyFilename.pdf",
+                 }
+            </remarks>
+             <param name="containerName">The Blob container name. Required</param>
+             <param name="fileName">The Blob file name. Required</param>
+             <response code="200">Success, return a collection of projectLiteDto. Or an empty array if the the query does not find any projects.</response>
+             <response code="400">If query has a bad format or has unknown fields.</response> 
+             <response code="501">Something wrong occurs with this operation.</response>
+        </member>
+        <member name="M:morris_azstorage_service.Controllers.FilesController.RenameFile(System.String,System.String,System.String)">
+             <summary>
+             Rename a file in a container.
+             </summary>
+             <returns> Copies the original blob to the new, renamed blob - then deletes the old blob.</returns>
+             <remarks> The original file name is maintained, and suffixed with a numerical (1) counter if the file already exists.<br></br>
+             Use the other method to include a renamed file.
+             Prefix filters to reduce the RBAR.<br></br> 
+             Sample request:
+            
+                 POST/UploadFile
+                 {
+                    "containerName": "pres-trust-client",
+                    "fileName":"MyFilename.pdf",
+                    "newFileName":"MyNewFilename.pdf",
+                 }
+            </remarks>
+             <param name="containerName">The Blob container name. Required</param>
+             <param name="fileName">The Blob file name. Required</param>
+             <param name="newFileName">The Blob file name. Required</param>
+             <response code="200">Success, return a collection of projectLiteDto. Or an empty array if the the query does not find any projects.</response>
+             <response code="400">If query has a bad format or has unknown fields.</response> 
+             <response code="501">Something wrong occurs with this operation.</response>
+        </member>
+        <member name="M:morris_azstorage_service.Controllers.FilesController.DeleteFile(System.String,System.String)">
+             <summary>
+             Delete a file in a container.
+             </summary>
+             <returns> Deletes the blob.</returns>
+             <remarks> The original file name is maintained, and suffixed with a numerical (1) counter if the file already exists.<br></br>
+             Use the other method to include a renamed file.
+             Prefix filters to reduce the RBAR.<br></br> 
+             Sample request:
+            
+                 POST/UploadFile
+                 {
+                    "containerName": "pres-trust-client",
+                    "fileName":"MyFilename.pdf"
+                 }
+            </remarks>
+             <param name="containerName">The Blob container name. Required</param>
+             <param name="fileName">The Blob file name. Required</param>
+             <response code="200">Success, return a collection of projectLiteDto. Or an empty array if the the query does not find any projects.</response>
+             <response code="400">If query has a bad format or has unknown fields.</response> 
+             <response code="501">Something wrong occurs with this operation.</response>
+        </member>
+    </members>
+</doc>
