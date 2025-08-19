@@ -22,15 +22,15 @@ jobs:
 
       # Restore NuGet packages
       - name: Restore dependencies
-        run: dotnet restore ./gc-blob-service/morris-azstorage-service
+        run: dotnet restore ./gc-blob-service/morris-azstorage-service/morris-azstorage-service.csproj
 
       # Build the project
       - name: Build
-        run: dotnet build ./gc-blob-service/morris-azstorage-service --configuration Release --no-restore
+        run: dotnet build ./gc-blob-service/morris-azstorage-service/morris-azstorage-service.csproj --configuration Release --no-restore
 
       # Publish the project
       - name: Publish
-        run: dotnet publish ./gc-blob-service/morris-azstorage-service --configuration Release --output ./publish --no-restore
+        run: dotnet publish ./gc-blob-service/morris-azstorage-service/morris-azstorage-service.csproj --configuration Release --output ./publish --no-restore
 
       # Deploy to Azure Web App
       - name: Deploy to Azure Web App
@@ -40,6 +40,7 @@ jobs:
           slot-name: 'production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E7A459DD016A4E3B8116FAF5C06249D8 }}
           package: ./publish
+
 
 
 
