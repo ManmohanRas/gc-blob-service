@@ -19,13 +19,16 @@ jobs:
           dotnet-version: '5.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore ./gc-blob-service/morris-azstorage-service/morris-azstorage-service.csproj
+        working-directory: ./gc-blob-service/morris-azstorage-service
+        run: dotnet restore morris-azstorage-service.csproj
 
       - name: Build
-        run: dotnet build ./gc-blob-service/morris-azstorage-service/morris-azstorage-service.csproj --configuration Release --no-restore
+        working-directory: ./gc-blob-service/morris-azstorage-service
+        run: dotnet build morris-azstorage-service.csproj --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ./gc-blob-service/morris-azstorage-service/morris-azstorage-service.csproj -c Release -f net5.0 -r win-x64 --no-self-contained -o ./publish
+        working-directory: ./gc-blob-service/morris-azstorage-service
+        run: dotnet publish morris-azstorage-service.csproj -c Release -f net5.0 -r win-x64 -o ./publish
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v1
@@ -33,4 +36,4 @@ jobs:
           app-name: 'api-greencounty-blob'
           slot-name: 'production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E7A459DD016A4E3B8116FAF5C06249D8 }}
-          package: ./publish
+          package: ./gc-blob-service/morris-azstorage-service/publish
