@@ -42,41 +42,41 @@ namespace morris_azstorage_service
             services.AddControllers().AddNewtonsoftJson();
 
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }
-                                       ).AddJwtBearer(o =>
-                                       {
-                                           o.Authority = Configuration["MorrisSTSEndpoint"];
-                                           o.Audience = Configuration["APIResource"];
-                                           // IdentityServer emits a typ header by default, recommended extra check
-                                           //o.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                                           //o.RequireHttpsMetadata = false;
+            //services.AddAuthentication(options =>
+            //{
+            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}
+            //                           ).AddJwtBearer(o =>
+            //                           {
+            //                               o.Authority = Configuration["MorrisSTSEndpoint"];
+            //                               o.Audience = Configuration["APIResource"];
+            //                               // IdentityServer emits a typ header by default, recommended extra check
+            //                               //o.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+            //                               //o.RequireHttpsMetadata = false;
 
-                                           o.TokenValidationParameters = new TokenValidationParameters
-                                           { ValidateAudience = false };
-                                       });
+            //                               o.TokenValidationParameters = new TokenValidationParameters
+            //                               { ValidateAudience = false };
+            //                           });
 
           
 
 
-            // adds an authorization policy to make sure the token is for scope 'api1'
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ApiScope", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "morris_storage_api");
-                });
-                options.AddPolicy("mcprimaAdmin", policy =>
-                {
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireRole("morrisdeveloper_admin","sysadmin");
-                });
+            //// adds an authorization policy to make sure the token is for scope 'api1'
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("ApiScope", policy =>
+            //    {
+            //        policy.RequireAuthenticatedUser();
+            //        policy.RequireClaim("scope", "morris_storage_api");
+            //    });
+            //    options.AddPolicy("mcprimaAdmin", policy =>
+            //    {
+            //        policy.RequireAuthenticatedUser();
+            //        policy.RequireRole("morrisdeveloper_admin","sysadmin");
+            //    });
            
-            });
+            //});
 
 
             string[] hsts = Configuration.GetSection("CORSConfiguration:AllowedHosts").Get<string[]>();

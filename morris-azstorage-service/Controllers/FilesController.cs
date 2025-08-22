@@ -31,7 +31,7 @@ using Azure.Storage.Sas;
 namespace morris_azstorage_service.Controllers
 {
 
-    [Authorize(Policy = "ApiScope")]
+    //[Authorize(Policy = "ApiScope")]
     [ApiController]
     [Route("[controller]")]
     public class FilesController : ControllerBase
@@ -64,7 +64,8 @@ namespace morris_azstorage_service.Controllers
             string connectionString = Configuration["AzureStorageBlobOptions:MCPRIMAConnectionString"];
 
             // Get a reference to a container named "sample-container" and then create it
-            BlobContainerClient container = new BlobContainerClient(connectionString, "pres-trust-client");
+            BlobServiceClient serviceClient = new BlobServiceClient(connectionString);
+
             try
             {
                 // List all the blobs
@@ -82,7 +83,6 @@ namespace morris_azstorage_service.Controllers
 
                     blobs.Add(new Blobi()
                     {
-                        containerName = "pres-trust-client",
                         blobName = blob.Name,
                         metadata = blob.Metadata
                     }

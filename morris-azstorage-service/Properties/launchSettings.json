@@ -14,9 +14,7 @@
       "launchBrowser": true,
       "launchUrl": "v1",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "KeyVaultUri": "https://morrisgis-key-vault.vault.azure.net/",
-        "AZURE_USERNAME": "Swalter@co.morris.nj.us"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "morris_azstorage_service": {
@@ -25,9 +23,7 @@
       "launchUrl": "v1",
       "applicationUrl": "https://localhost:44332;http://localhost:52565",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "KeyVaultUri": "https://morrisgis-key-vault.vault.azure.net/",
-        "AZURE_USERNAME": "Swalter@co.morris.nj.us"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

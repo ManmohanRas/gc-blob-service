@@ -41,7 +41,6 @@
                  POST/UploadFile
                  {
                     "asset": {IFormFile},
-                    "container": "pres-trust-client",
                     "saveAsFileName":null,
                     "title":null,
                     "description":null,
@@ -69,7 +68,6 @@
             
                  POST/UploadFile
                  {
-                    "containerName": "pres-trust-client",
                     "fileName":"MyFilename.pdf",
                  }
             </remarks>
@@ -91,7 +89,6 @@
             
                  POST/UploadFile
                  {
-                    "containerName": "pres-trust-client",
                     "fileName":"MyFilename.pdf",
                     "newFileName":"MyNewFilename.pdf",
                  }
@@ -115,7 +112,6 @@
             
                  POST/UploadFile
                  {
-                    "containerName": "pres-trust-client",
                     "fileName":"MyFilename.pdf"
                  }
             </remarks>
