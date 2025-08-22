@@ -1,0 +1,45 @@
+name: Build and deploy ASP.Net Core app to Azure Web App - api-greencounty-blob
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+      # Checkout the repo
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Setup .NET 5 SDK
+      - name: Setup .NET 5 SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+
+      # Restore dependencies
+      - name: Restore dependencies
+        working-directory: ./morris-azstorage-service
+        run: dotnet restore morris-azstorage-service.csproj
+
+      # Build the project
+      - name: Build
+        working-directory: ./morris-azstorage-service
+        run: dotnet build morris-azstorage-service.csproj --configuration Release --no-restore
+
+      # Publish the project
+      - name: Publish
+        working-directory: ./morris-azstorage-service
+        run: dotnet publish morris-azstorage-service.csproj -c Release -f net5.0 -r win-x64 -o ./publish
+
+      # Deploy to Azure Web App
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v1
+        with:
+          app-name: 'api-greencounty-blob'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E7A459DD016A4E3B8116FAF5C06249D8 }}
+          package: ./morris-azstorage-service/publish
