@@ -64,8 +64,7 @@ namespace morris_azstorage_service.Controllers
             string connectionString = Configuration["AzureStorageBlobOptions:MCPRIMAConnectionString"];
 
             // Get a reference to a container named "sample-container" and then create it
-            BlobServiceClient serviceClient = new BlobServiceClient(connectionString);
-
+            BlobContainerClient container = new BlobContainerClient(connectionString, "pres-trust-client");
             try
             {
                 // List all the blobs
@@ -83,6 +82,7 @@ namespace morris_azstorage_service.Controllers
 
                     blobs.Add(new Blobi()
                     {
+                        containerName = "pres-trust-client",
                         blobName = blob.Name,
                         metadata = blob.Metadata
                     }
@@ -313,12 +313,12 @@ namespace morris_azstorage_service.Controllers
 
             try
             {
-                    // temporary protection of non-prestrust containers
+                // temporary protection of non-prestrust containers
                 string _container = User.FindFirst("client_id").Value;
                 if (bm.container != _container)
                 {
                     return BadRequest(false);
-                
+
                 }
 
                 // Replace user's extension(or lack-thereof) with the extension from the uploaded file
@@ -342,37 +342,37 @@ namespace morris_azstorage_service.Controllers
                 // Get a reference to a container named "sample-container" and then create it
                 BlobContainerClient container = new BlobContainerClient(connectionString, bm.container);
 
-           
-                    // Get a reference to a blob
-                    string fn = bm.saveAsFileName ?? bm.asset.FileName;
-                    BlobClient blob = container.GetBlobClient(fn);
 
-                    await blob.UploadAsync(bm.asset.OpenReadStream());
+                // Get a reference to a blob
+                string fn = bm.saveAsFileName ?? bm.asset.FileName;
+                BlobClient blob = container.GetBlobClient(fn);
 
-                    // Add metadata to the blob.
+                await blob.UploadAsync(bm.asset.OpenReadStream());
 
-                    IDictionary<string, string> dict = new Dictionary<string, string>();
+                // Add metadata to the blob.
 
-                    if (bm.title is null) { dict.Add("title", bm.saveAsFileName); } else { dict.Add("title", bm.title); };
-                    if (bm.caption != null) { dict.Add("caption", bm.caption); };
-                    if (bm.altText != null) { dict.Add("altText", bm.altText); };
-                    if (bm.refDate != null) { dict.Add("refDate", bm.refDate); };
-                    if (bm.latitude != "0" && bm.latitude != null) { dict.Add("latitude", bm.latitude.ToString()); };
-                    if (bm.longitude != "0" && bm.longitude != null) { dict.Add("longitude", bm.longitude.ToString()); };
-                    if (bm.description != null) { dict.Add("description", bm.description); };
-                    if (bm.category != null) { dict.Add("category", bm.category); };
-                    if (bm.user != null) { dict.Add("creator", bm.user); };
-                    if (bm.owner != null) { dict.Add("owner", bm.owner); };
-                    if (bm.component != null) { dict.Add("component", bm.component); };
-                    if (bm.domId != null) { dict.Add("domId", bm.domId); };
+                IDictionary<string, string> dict = new Dictionary<string, string>();
 
-                    await blob.SetMetadataAsync(dict);
+                if (bm.title is null) { dict.Add("title", bm.saveAsFileName); } else { dict.Add("title", bm.title); };
+                if (bm.caption != null) { dict.Add("caption", bm.caption); };
+                if (bm.altText != null) { dict.Add("altText", bm.altText); };
+                if (bm.refDate != null) { dict.Add("refDate", bm.refDate); };
+                if (bm.latitude != "0" && bm.latitude != null) { dict.Add("latitude", bm.latitude.ToString()); };
+                if (bm.longitude != "0" && bm.longitude != null) { dict.Add("longitude", bm.longitude.ToString()); };
+                if (bm.description != null) { dict.Add("description", bm.description); };
+                if (bm.category != null) { dict.Add("category", bm.category); };
+                if (bm.user != null) { dict.Add("creator", bm.user); };
+                if (bm.owner != null) { dict.Add("owner", bm.owner); };
+                if (bm.component != null) { dict.Add("component", bm.component); };
+                if (bm.domId != null) { dict.Add("domId", bm.domId); };
 
-                    return Ok(true);
+                await blob.SetMetadataAsync(dict);
+
+                return Ok(true);
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     false);
@@ -486,9 +486,9 @@ namespace morris_azstorage_service.Controllers
                 Resource = "c"
             };
 
-           
-                sasBuilder.ExpiresOn = DateTimeOffset.UtcNow.AddHours(1);
-                sasBuilder.SetPermissions(BlobContainerSasPermissions.All);
+
+            sasBuilder.ExpiresOn = DateTimeOffset.UtcNow.AddHours(1);
+            sasBuilder.SetPermissions(BlobContainerSasPermissions.All);
 
             Uri sasUri = container.GenerateSasUri(sasBuilder);
             Console.WriteLine("SAS URI for blob container is: {0}", sasUri);
@@ -500,28 +500,28 @@ namespace morris_azstorage_service.Controllers
         }
 
 
-            /// <summary>
-            /// Download a file from a container.
-            /// </summary>
-            /// <returns> Downloads a file to an Azure container.</returns>
-            /// <remarks> The original file name is maintained, and suffixed with a numerical (1) counter if the file already exists.<br></br>
-            /// Use the other method to include a renamed file.
-            /// Prefix filters to reduce the RBAR.<br></br> 
-            /// Sample request:
-            ///
-            ///     POST/UploadFile
-            ///     {
-            ///        "containerName": "pres-trust-client",
-            ///        "blobName":"MyFilename.pdf",
-            ///     }
-            ///</remarks>
-            /// <param name="containerName">The Blob container name. Required</param>
-            /// <param name="blobName">The Blob file name. Required</param>
-            /// <response code="200">Success, return a collection of projectLiteDto. Or an empty array if the the query does not find any projects.</response>
-            /// <response code="400">If query has a bad format or has unknown fields.</response> 
-            /// <response code="501">Something wrong occurs with this operation.</response>
-            [HttpPost("DownloadFile")]
-      //  [AllowAnonymous]
+        /// <summary>
+        /// Download a file from a container.
+        /// </summary>
+        /// <returns> Downloads a file to an Azure container.</returns>
+        /// <remarks> The original file name is maintained, and suffixed with a numerical (1) counter if the file already exists.<br></br>
+        /// Use the other method to include a renamed file.
+        /// Prefix filters to reduce the RBAR.<br></br> 
+        /// Sample request:
+        ///
+        ///     POST/UploadFile
+        ///     {
+        ///        "containerName": "pres-trust-client",
+        ///        "blobName":"MyFilename.pdf",
+        ///     }
+        ///</remarks>
+        /// <param name="containerName">The Blob container name. Required</param>
+        /// <param name="blobName">The Blob file name. Required</param>
+        /// <response code="200">Success, return a collection of projectLiteDto. Or an empty array if the the query does not find any projects.</response>
+        /// <response code="400">If query has a bad format or has unknown fields.</response> 
+        /// <response code="501">Something wrong occurs with this operation.</response>
+        [HttpPost("DownloadFile")]
+        //  [AllowAnonymous]
         public async Task<IActionResult> DownloadFile([FromBody] Blobi blobi)
         {
             // // Get a connection string to our Azure Storage account.
@@ -604,37 +604,37 @@ namespace morris_azstorage_service.Controllers
 
 
                 string _container = User.FindFirst("client_id").Value;
-            if (_container == "pres-trust-client-localhost") 
+                if (_container == "pres-trust-client-localhost")
                 {
-                _container = "pres-trust-client-dev";
+                    _container = "pres-trust-client-dev";
                 }
-            // Define the cancellation token.
-            CancellationTokenSource source = new CancellationTokenSource();
-            CancellationToken cancellationtoken = source.Token;
+                // Define the cancellation token.
+                CancellationTokenSource source = new CancellationTokenSource();
+                CancellationToken cancellationtoken = source.Token;
 
-            // Get a connection string to our Azure Storage account.
-            string connectionString = Configuration["AzureStorageBlobOptions:MCPRIMAConnectionString"];
+                // Get a connection string to our Azure Storage account.
+                string connectionString = Configuration["AzureStorageBlobOptions:MCPRIMAConnectionString"];
 
-            // Get a reference to a container named "sample-container" and then create it
-            BlobContainerClient container = new BlobContainerClient(connectionString, _container);
+                // Get a reference to a container named "sample-container" and then create it
+                BlobContainerClient container = new BlobContainerClient(connectionString, _container);
 
-            // Path to the directory to upload
-            string downloadPath = downloadRequest.folderName + "\\download_" + DateTime.Now.ToString("yymmdd_hhmmss") + "\\";
-            Directory.CreateDirectory(downloadPath);
-            Console.WriteLine($"Created directory {downloadPath}");
+                // Path to the directory to upload
+                string downloadPath = downloadRequest.folderName + "\\download_" + DateTime.Now.ToString("yymmdd_hhmmss") + "\\";
+                Directory.CreateDirectory(downloadPath);
+                Console.WriteLine($"Created directory {downloadPath}");
 
-            // Specify the StorageTransferOptions
-            var options = new StorageTransferOptions
-            {
-                // Set the maximum number of workers that may be used in a parallel transfer.
-                MaximumConcurrency = 8,
+                // Specify the StorageTransferOptions
+                var options = new StorageTransferOptions
+                {
+                    // Set the maximum number of workers that may be used in a parallel transfer.
+                    MaximumConcurrency = 8,
 
-                // Set the maximum length of a transfer to 50MB.
-                MaximumTransferLength = 50 * 1024 * 1024
-            };
+                    // Set the maximum length of a transfer to 50MB.
+                    MaximumTransferLength = 50 * 1024 * 1024
+                };
 
-            // Download the blobs
-         
+                // Download the blobs
+
                 int count = 0;
 
                 // Create a queue of tasks that will each upload one file.
@@ -779,7 +779,7 @@ namespace morris_azstorage_service.Controllers
                 // temporary protection of non-prestrust containers
                 if (blobi.containerName != _container)
                 {
-                    return BadRequest (false);
+                    return BadRequest(false);
                 }
 
                 // Get a connection string to our Azure Storage account.
@@ -797,7 +797,7 @@ namespace morris_azstorage_service.Controllers
 
                 return Ok(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.Write(ex.Message);
                 return NotFound(false);
