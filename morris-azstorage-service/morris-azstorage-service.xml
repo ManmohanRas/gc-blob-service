@@ -18,7 +18,7 @@
 
 				POST/ListFilesByContainer
 				{
-				"folder": "pres-trust-client",
+				"folder": "green-county-blob",
 				"prefix": "morris",
 				"partialstring":"",
 				"extensions": [""]
@@ -43,7 +43,7 @@
 				POST/UploadFile
 				{
 				"asset": {IFormFile},
-				"container": "pres-trust-client",
+				"container": "green-county-blob",
 				"saveAsFileName":null,
 				"title":null,
 				"description":null,
@@ -72,7 +72,7 @@
 
 				POST/UploadFile
 				{
-				"containerName": "pres-trust-client",
+				"containerName": "green-county-blob",
 				"fileName":"MyFilename.pdf",
 				}
 			</remarks>
@@ -95,7 +95,7 @@
 
 				POST/UploadFile
 				{
-				"containerName": "pres-trust-client",
+				"containerName": "green-county-blob",
 				"fileName":"MyFilename.pdf",
 				"newFileName":"MyNewFilename.pdf",
 				}
@@ -120,7 +120,7 @@
 
 				POST/UploadFile
 				{
-				"containerName": "pres-trust-client",
+				"containerName": "green-county-blob",
 				"fileName":"MyFilename.pdf"
 				}
 			</remarks>

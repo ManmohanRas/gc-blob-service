@@ -64,7 +64,7 @@ namespace morris_azstorage_service.Controllers
             string connectionString = Configuration["AzureStorageBlobOptions:MCPRIMAConnectionString"];
 
             // Get a reference to a container named "sample-container" and then create it
-            BlobContainerClient container = new BlobContainerClient(connectionString, "pres-trust-client");
+            BlobContainerClient container = new BlobContainerClient(connectionString, "green-county-blob");
             try
             {
                 // List all the blobs
@@ -82,7 +82,7 @@ namespace morris_azstorage_service.Controllers
 
                     blobs.Add(new Blobi()
                     {
-                        containerName = "pres-trust-client",
+                        containerName = "green-county-blob",
                         blobName = blob.Name,
                         metadata = blob.Metadata
                     }
@@ -114,7 +114,7 @@ namespace morris_azstorage_service.Controllers
         ///
         ///     POST/ListFilesByContainer
         ///     {
-        ///         "containerName": "pres-trust-client",
+        ///         "containerName": "green-county-blob",
         ///         "prefix": "ostf",
         ///         "partialstring": ""
         ///     }
@@ -213,7 +213,7 @@ namespace morris_azstorage_service.Controllers
         ///
         ///     POST/GetBlobMetadata
         ///     {
-        ///         "containerName": "pres-trust-client",
+        ///         "containerName": "green-county-blob",
         ///         "blobName": "morris"
         ///     }
         ///</remarks>
@@ -286,7 +286,7 @@ namespace morris_azstorage_service.Controllers
         ///     POST/UploadFile
         ///     {
         ///        "asset": {IFormFile},
-        ///        "container": "pres-trust-client",
+        ///        "container": "green-county-blob",
         ///        "saveAsFileName":null,
         ///        "title":null,
         ///        "caption":null,
@@ -314,12 +314,6 @@ namespace morris_azstorage_service.Controllers
             try
             {
                 // temporary protection of non-prestrust containers
-                string _container = User.FindFirst("client_id").Value;
-                if (bm.container != _container)
-                {
-                    return BadRequest(false);
-
-                }
 
                 // Replace user's extension(or lack-thereof) with the extension from the uploaded file
                 if (bm.saveAsFileName is null)
@@ -390,7 +384,7 @@ namespace morris_azstorage_service.Controllers
         ///     PUT/UpdateFile
         ///     {
         ///        "blobName": null,
-        ///        "containerName": "pres-trust-client",
+        ///        "containerName": "green-county-blob",
         ///        "saveAsFileName":null,
         ///        "metadata": {
         ///             "title":null,
@@ -511,7 +505,7 @@ namespace morris_azstorage_service.Controllers
         ///
         ///     POST/UploadFile
         ///     {
-        ///        "containerName": "pres-trust-client",
+        ///        "containerName": "green-county-blob",
         ///        "blobName":"MyFilename.pdf",
         ///     }
         ///</remarks>
@@ -604,9 +598,9 @@ namespace morris_azstorage_service.Controllers
 
 
                 string _container = User.FindFirst("client_id").Value;
-                if (_container == "pres-trust-client-localhost")
+                if (_container == "green-county-blob-localhost")
                 {
-                    _container = "pres-trust-client-dev";
+                    _container = "green-county-blob-dev";
                 }
                 // Define the cancellation token.
                 CancellationTokenSource source = new CancellationTokenSource();
@@ -688,7 +682,7 @@ namespace morris_azstorage_service.Controllers
         ///
         ///     POST/UploadFile
         ///     {
-        ///        "containerName": "pres-trust-client",
+        ///        "containerName": "green-county-blob",
         ///        "blobName":"MyFilename.pdf",
         ///        "saveAsFileName":"MyNewFilename.pdf",
         ///     }
@@ -759,7 +753,7 @@ namespace morris_azstorage_service.Controllers
         ///
         ///     POST/UploadFile
         ///     {
-        ///        "containerName": "pres-trust-client",
+        ///        "containerName": "green-county-blob",
         ///        "blobName":"MyFilename.pdf"
         ///     }
         ///</remarks>
