@@ -765,18 +765,18 @@ namespace morris_azstorage_service.Controllers
         {
             try
             {
-                string _container = User.FindFirst("client_id").Value;
-                // temporary protection of non-prestrust containers
-                if (blobi.containerName != _container)
-                {
-                    return BadRequest(false);
-                }
+                //string _container = User.FindFirst("client_id").Value;
+                //// temporary protection of non-prestrust containers
+                //if (blobi.containerName != _container)
+                //{
+                //    return BadRequest(false);
+                //}
 
                 // Get a connection string to our Azure Storage account.
                 string connectionString = Configuration["AzureStorageBlobOptions:MCPRIMAConnectionString"];
 
                 // Get a reference to a container named "sample-container" and then create it
-                BlobContainerClient container = new BlobContainerClient(connectionString, blobi.containerName);
+                BlobContainerClient container = new BlobContainerClient(connectionString, "green-county-blob");
 
 
 
