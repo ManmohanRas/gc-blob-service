@@ -597,11 +597,7 @@ namespace morris_azstorage_service.Controllers
             {
 
 
-                string _container = User.FindFirst("client_id").Value;
-                if (_container == "green-county-blob-localhost")
-                {
-                    _container = "green-county-blob-dev";
-                }
+             
                 // Define the cancellation token.
                 CancellationTokenSource source = new CancellationTokenSource();
                 CancellationToken cancellationtoken = source.Token;
@@ -610,7 +606,7 @@ namespace morris_azstorage_service.Controllers
                 string connectionString = Configuration["AzureStorageBlobOptions:MCPRIMAConnectionString"];
 
                 // Get a reference to a container named "sample-container" and then create it
-                BlobContainerClient container = new BlobContainerClient(connectionString, _container);
+                BlobContainerClient container = new BlobContainerClient(connectionString, "green-county-blob");
 
                 // Path to the directory to upload
                 string downloadPath = downloadRequest.folderName + "\\download_" + DateTime.Now.ToString("yymmdd_hhmmss") + "\\";
